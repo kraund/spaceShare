@@ -95,6 +95,9 @@ module.exports = {
         for (let index = 0; index < array.length; index++) {
             await callback(array[index], index, array);
         }
+    },
+    getKeyByValue: async function (object, value) {
+        return Object.keys(object).find(key => object[key] === value);
     }
 
 }

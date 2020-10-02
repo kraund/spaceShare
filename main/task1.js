@@ -11,24 +11,28 @@ describe("Login", function () {
     const submit = await nxutils.expectObjectToBeVisible("[type='submit']");
     await submit.click();
 
+    //main page
     const dropdows = await browser.$$("[class='dropdown-toggle']");
     await dropdows[3].click();
 
     await nxutils.waitUntilObjectIsVisibleAndClick(
       "[href='/en/users/dashboard']"
     );
+
+    //list of spaces
     await nxutils.waitUntilObjectIsVisibleAndClick(
       "[class*='space-adding-description']"
     );
 
+    //pop-up window
     const venue_Field = await nxutils.expectObjectToBeVisible(
       "[id='venue-name']"
     );
     await venue_Field.setValue("task1");
+
+    //1st page
     await nxutils.waitUntilObjectIsVisibleAndClick("[id='lets-start']");
-
     await nxutils.waitUntilObjectIsVisibleAndClick("[title*='Select']");
-
     await nxutils.waitUntilObjectIsVisibleAndClick("=Hotel");
     await browser.pause(2000);
 
@@ -49,19 +53,24 @@ describe("Login", function () {
 
     await nxutils.waitUntilObjectIsVisibleAndClick("[id='nextStep']");
 
+    //2nd page
     await browser.pause(2000);
 
-    // await nxutils.waitUntilObjectIsVisibleAndClick("[id='monday_open']")
-
-    // const time_open = $('li').$('=10:00')
-    // await time_open.click()
-    // await nxutils.waitUntilObjectIsVisibleAndClick("[id='monday_closed']")
-    // await nxutils.waitUntilObjectIsVisibleAndClick("=18:00")
+    await nxutils.waitUntilObjectIsVisibleAndClick("[id='monday_open']");
+    const from = await browser.$('li=10:00')
+    await from.click()
+    await browser.pause(1000);
+    await nxutils.waitUntilObjectIsVisibleAndClick("[id='monday_closed']");
+    await browser.pause(1000);
+    const to_time = await browser.$$('li=23:00')
+    await to_time[1].click()
+    await browser.pause(2000);
     await nxutils.waitUntilObjectIsVisibleAndClick("[id='saturday']");
     await nxutils.waitUntilObjectIsVisibleAndClick("[id='sunday']");
-
     await nxutils.waitUntilObjectIsVisibleAndClick("[id='nextStep']");
 
+    //3rd page
+    await browser.pause(1000)
     const desc_local = await nxutils.expectObjectToBeVisible(
       "[id='description-local']"
     );
@@ -113,7 +122,19 @@ describe("Login", function () {
 
     await nxutils.waitUntilObjectIsVisibleAndClick("[id='nextStep']");
 
+    //4th page  (Uncommented solution for an element with input tag (input tag is required for an image to be added using the .sendKeys()))
     await browser.pause(2000);
+
+    const remoteFilePath = await browser.uploadFile(
+      "/Users/vladyslaw/Desktop/product/football2/main/sub-main/resources/operator_logo.png"
+    );
+    const paste = await browser.$('[id="upload"]');
+    await paste.scrollIntoView();
+    //await paste.doubleClick();
+    await paste.addValue(remoteFilePath);
+    //await paste.setValue(remoteFilePath);
+    //await paste.setValue(remoteFilePath);
+    await browser.pause(10000);
 
     // var path = require("path");
     // var toUpload = await path.join(__dirname, "..", "resources",
@@ -131,16 +152,7 @@ describe("Login", function () {
     // );
     // await fileUpload.waitForDisplayed();
 
-    const remoteFilePath = await browser.uploadFile(
-      "/Users/vladyslaw/Desktop/product/football2/main/sub-main/resources/operator_logo.png"
-    );
-    const paste = await browser.$('[id="upload"]');
-    await paste.scrollIntoView();
-    //await paste.doubleClick();
-    await paste.addValue(remoteFilePath);
-    //await paste.setValue(remoteFilePath);
-    //await paste.setValue(remoteFilePath);
-    await browser.pause(10000);
+
 
     // const input = await browser.$('[id="insidePhotosUpload"]')
     // const submitBtn = await browser.$('[id="nextStep"]')
